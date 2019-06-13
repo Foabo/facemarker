@@ -1,0 +1,28 @@
+version: '2'
+services:
+  mysql.solink:
+    build:
+      context: mysql
+      dockerfile: Dockerfile.debug
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - ../data/mysql:/var/lib/mysql
+
+  phpmyadmin.solink:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - 6062:80
+    links:
+      - mysql.solink:db
+
+  redis.solink:
+    image: redis:latest
+    volumes:
+      - ../data/redis:/data
+
+  facemarker_srv.solink:
+    ports:
+      - 8080:8080
+    build: facemarker_srv
+#    mem_limit: 1G
+
